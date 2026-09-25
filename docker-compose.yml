@@ -1,0 +1,37 @@
+# 古建筑屋面导排审计 — 本地容器编排
+#
+#   WEB_PORT=8080 docker compose up web      # 仅启动静态 Web 服务
+#   docker compose up --build verify        # 一次性校验：测试→构建→冒烟后退出
+#   docker compose up --build               # 同时启动 web，并运行一次性 verify
+#
+# verify 以退出码报告结果：0 全部通过，非 0 存在失败（docker compose 会显示 Exited (1)）。
+
+services:
+  web:
+    build:
+      context: .
+      target: runtime
+    image: roof-drainage-web:latest
+    ports:
+      # 宿主机端口可由 WEB_PORT 配置，容器内固定 80
+      - "${WEB_PORT:-8080}:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  verify:
+    build:
+      context: .
+      target: build
+    image: roof-drainage-verify:latest
+    depends_on:
+      web:
+        condition: service_healthy
+    environment:
+      SMOKE_BASE_URL: "http://web"
+    entrypoint: ["/bin/sh", "scripts/verify-entrypoint.sh"]
+    restart: "no"

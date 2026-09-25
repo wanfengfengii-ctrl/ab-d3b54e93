@@ -1,0 +1,19 @@
+{
+  "name": "roof-drainage-audit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "古建筑屋面网格导排审计（浏览器本地计算）",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10",
+    "vitest": "^2.1.5"
+  }
+}
