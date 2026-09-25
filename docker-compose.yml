@@ -1,0 +1,27 @@
+name: roof-drainage-audit
+
+services:
+  # 静态 Web 服务：nginx，宿主机端口由 WEB_PORT 配置（默认 8080）
+  web:
+    build:
+      context: .
+      target: web
+    image: roof-audit-web
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/healthz || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  # 一次性验证服务：代码测试 + 生产构建 + 导排领域冒烟，完成后自行退出并以退出码报告
+  # 用法：docker compose run --rm verify （退出码即结果）；或 docker compose up verify
+  verify:
+    build:
+      context: .
+      target: verify
+    image: roof-audit-verify
+    restart: "no"

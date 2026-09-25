@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-09-25T16:25:50.448Z",
+  "files": {
+    "flow.js": {
+      "name": "flow.0fe27f9a.js",
+      "sha256": "0fe27f9a"
+    },
+    "examples.js": {
+      "name": "examples.b12e43c6.js",
+      "sha256": "b12e43c6"
+    },
+    "styles.css": {
+      "name": "styles.89d757c2.css",
+      "sha256": "89d757c2"
+    },
+    "app.js": {
+      "name": "app.3333191c.js",
+      "sha256": "3333191c"
+    },
+    "index.html": {
+      "name": "index.html",
+      "sha256": "9650cdc0"
+    },
+    "healthz": {
+      "name": "healthz",
+      "sha256": "dc51b8c9"
+    }
+  }
+}

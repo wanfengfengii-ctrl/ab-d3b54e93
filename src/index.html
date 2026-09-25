@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>古建屋面导排审计</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1>古建屋面临时防雨层 · 导排审计</h1>
+    <p class="sub">
+      在屋面网格上逐格标注整数高程、排水口与不可过水的脆弱接缝；
+      审计完全在浏览器本地按共享边计算水流，确认雨水不会被引入病害区域。
+    </p>
+  </header>
+
+  <main>
+    <section class="panel toolbar" aria-label="编辑工具栏">
+      <div class="group" role="radiogroup" aria-label="指针工具">
+        <span class="group-title">工具</span>
+        <label><input type="radio" name="tool" value="elev" checked> 高程</label>
+        <label><input type="radio" name="tool" value="drain"> 排水口</label>
+        <label><input type="radio" name="tool" value="fragile"> 脆弱接缝</label>
+      </div>
+      <div class="group">
+        <label>高程值
+          <input id="elevValue" type="number" step="1" value="5" class="num">
+        </label>
+        <span class="hint">（点击/拖动涂刷格子）</span>
+      </div>
+      <div class="group">
+        <label>行 <input id="rowsInput" type="number" min="1" max="20" value="6" class="num"></label>
+        <label>列 <input id="colsInput" type="number" min="1" max="20" value="8" class="num"></label>
+        <button id="applySize" type="button">调整尺寸</button>
+      </div>
+      <div class="group">
+        <button id="loadSafe" type="button">载入安全示例</button>
+        <button id="loadFault" type="button">载入病害示例</button>
+        <button id="clearGrid" type="button">清空草稿</button>
+      </div>
+      <div class="group">
+        <button id="auditBtn" type="button" class="primary">发起审计</button>
+      </div>
+    </section>
+
+    <div class="content">
+      <section class="panel board" aria-label="屋面网格">
+        <div id="grid" class="grid" data-tool="elev"></div>
+        <div id="status" class="status" role="status"></div>
+      </section>
+      <aside id="results" class="panel results" aria-label="审计结论"></aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <h2>水流与审计规则</h2>
+    <ul>
+      <li>水每一步流向「相邻（共边）且高度不高于当前格」中的<strong>最低格</strong>；并列最低时，每个并列格都是一个允许流向。排水口为终点。</li>
+      <li>以下任一情形即失效：<strong>边界外流</strong>（边界格无允许流向）、<strong>无去路</strong>（内部洼地）、<strong>进入脆弱接缝</strong>（允许流向跨越脆弱接缝）、<strong>等高区域循环</strong>（水流在等高区域打转）。</li>
+      <li>审计覆盖每个普通格的<strong>全部允许流向</strong>：任何一条允许流向失效，整体即不安全，不能因存在一条通往排水口的路线而判定安全。</li>
+      <li>不安全时按行优先给出首个问题起点，并在网格上标出一条可复核的失效流向链；安全时给出每格可达排水口与各排水口的汇水格集合。</li>
+      <li>任何草稿修改都会使旧结论失效，需重新审计。</li>
+    </ul>
+  </footer>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
